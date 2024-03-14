@@ -1,4 +1,4 @@
-name: Run Windows 10 Machine
+name: Run Ubuntu Machine
 
 on:
   workflow_dispatch: # يمكن تشغيل العمل يدوياً عبر واجهة المستخدم
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     
     steps:
     - name: Checkout code
