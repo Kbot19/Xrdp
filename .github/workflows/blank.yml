@@ -1,7 +1,7 @@
 name: Run Windows 10 Machine
 
 on:
-  workflow_dispatch: # يمكن تشغيل العمل يدوياً عبر Interfaccia الواجهة 
+  workflow_dispatch: # يمكن تشغيل العمل يدوياً عبر واجهة المستخدم
   schedule:
     - cron: "*/30 * * * *" # يمكن تشغيل العمل تلقائياً كل 30 دقيقة
 
@@ -13,8 +13,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Download ngrok
+      run: |
+        wget -O ngrok.tgz "https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz"
+        tar -xf ngrok.tgz
+
     - name: Run bash script
       run: bash nomachinewindows10
 
     - name: Sleep for 30 minutes
-      run: timeout 1800
+      run: sleep 1800
