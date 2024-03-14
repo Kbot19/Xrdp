@@ -19,7 +19,7 @@ jobs:
         tar -xf ngrok.tgz
 
     - name: Run bash script
-      run: bash nomachinewindows10
+      run: TERM=xterm bash nomachinewindows10
 
     - name: Sleep for 30 minutes
       run: sleep 1800
