@@ -1,0 +1,20 @@
+name: Run Windows 10 Machine
+
+on:
+  workflow_dispatch: # يمكن تشغيل العمل يدوياً عبر Interfaccia الواجهة 
+  schedule:
+    - cron: "*/30 * * * *" # يمكن تشغيل العمل تلقائياً كل 30 دقيقة
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run bash script
+      run: bash nomachinewindows10
+
+    - name: Sleep for 30 minutes
+      run: timeout 1800
