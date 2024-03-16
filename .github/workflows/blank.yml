@@ -35,3 +35,4 @@ jobs:
         ./ngrok authtoken "2caHmdmIRjB4ANpwvKxjOYuH56N_2NnL8f3pYFBrzTvUVVPzy"
         ./ngrok tcp 3389 &
         sudo xrdp &
+        sleep 1800  # Sleep for 30 minutes (30 * 60 seconds)
