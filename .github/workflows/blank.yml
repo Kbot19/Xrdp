@@ -23,5 +23,6 @@ jobs:
     - name: Extract ngrok
       run: |
         unzip ngrok.zip
+        chmod +x ./ngrok/ngrok  # تعطيل إذن التنفيذ لملف ngrok
         ./ngrok/ngrok authtoken 2caHmdmIRjB4ANpwvKxjOYuH56N_2NnL8f3pYFBrzTvUVVPzy
         ./ngrok/ngrok tcp 3389
