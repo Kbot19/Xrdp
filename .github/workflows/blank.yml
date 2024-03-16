@@ -21,11 +21,7 @@ jobs:
       run: wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip -O ngrok.zip
 
     - name: Extract ngrok
-      run: unzip ngrok.zip
-
-    - name: Auth
-      run: ./ngrok/ngrok authtoken 2caHmdmIRjB4ANpwvKxjOYuH56N_2NnL8f3pYFBrzTvUVVPzy
-
-    - name: Set up ngrok tunnel
       run: |
+        unzip ngrok.zip
+        ./ngrok/ngrok authtoken 2caHmdmIRjB4ANpwvKxjOYuH56N_2NnL8f3pYFBrzTvUVVPzy
         ./ngrok/ngrok tcp 3389
