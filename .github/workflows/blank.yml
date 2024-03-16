@@ -17,12 +17,10 @@ jobs:
       run: |
         sudo apt update && sudo apt install xrdp -y && sudo systemctl start xrdp
 
-    - name: Download ngrok
+    - name: Download and extract ngrok
       run: |
-        wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip -O ngrok.zip
-        unzip ngrok.zip
-
-    - name: Set up ngrok tunnel
-      run: |
-        ./ngrok/ngrok authtoken 2caHmdmIRjB4ANpwvKxjOYuH56N_2NnL8f3pYFBrzTvUVVPzy
-        ./ngrok/ngrok tcp 3389
+        wget -O ngrok.tgz "https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz"
+        tar -xf ngrok.tgz
+        ./ngrok authtoken 2caHmdmIRjB4ANpwvKxjOYuH56N_2NnL8f3pYFBrzTvUVVPzy
+        ./ngrok tcp 5900
+        
