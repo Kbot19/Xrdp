@@ -1,25 +1,28 @@
-name: Run Ubuntu Machine
+name: XRDP with ngrok
 
 on:
-  workflow_dispatch: # يمكن تشغيل العمل يدوياً عبر واجهة المستخدم
-  schedule:
-    - cron: "*/30 * * * *" # يمكن تشغيل العمل تلقائياً كل 30 دقيقة
+  push:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Download ngrok
+    - name: Install and start xrdp service
       run: |
-        wget -O ngrok.tgz "https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz"
-        tar -xf ngrok.tgz
+        sudo apt update && sudo apt install xrdp -y && sudo systemctl start xrdp
 
-    - name: Run bash script
-      run: TERM=xterm bash nomachinewindows10
+    - name: Download and install ngrok
+      run: |
+        wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+        unzip ngrok-stable-linux-amd64.zip
 
-    - name: Sleep for 30 minutes
-      run: sleep 1800
+    - name: Set up ngrok tunnel
+      run: |
+        ./ngrok authtoken 2caHmdmIRjB4ANpwvKxjOYuH56N_2NnL8f3pYFBrzTvUVVPzy
+        ./ngrok tcp 3389
