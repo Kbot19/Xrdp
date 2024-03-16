@@ -1,15 +1,9 @@
-name: XRDP with ngrok
+name: Install and Configure xrdp with ngrok
 
 on:
-  workflow_dispatch:  # يشغل العملية يدويًا عند الطلب اليدوي
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
-  schedule:
-    - cron: "*/30 * * * *"  # يشغل العملية تلقائيًا كل 30 دقيقة
 
 jobs:
   build:
@@ -18,27 +12,26 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
-    - name: Setup Xrdp for no password login
+      
+    - name: Set up ngrok
       run: |
-        sudo apt update && sudo apt install xrdp -y
-        sudo sed -i 's/autorun=xfreerdp/#autorun=xfreerdp/g' /etc/xrdp/startwm.sh
-        sudo systemctl restart xrdp
+        if ! command -v ngrok &> /dev/null; then
+          wget --no-check-certificate https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+          tar -xzf ngrok-v3-stable-linux-amd64.tgz
+          rm ngrok-v3-stable-linux-amd64.tgz
+        fi
 
-    - name: Download and extract ngrok
+    - name: Install xrdp
       run: |
-        wget -q -O ngrok.zip "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip"
-        unzip -q ngrok.zip
+        sudo apt-get update
+        sudo apt-get install -y xrdp
 
-    - name: Set up ngrok tunnel
+    - name: Set root password
       run: |
-        ./ngrok authtoken 2caHmdmIRjB4ANpwvKxjOYuH56N_2NnL8f3pYFBrzTvUVVPzy
+        echo "root:xrdp2024" | sudo chpasswd
+
+    - name: Launch ngrok and xrdp
+      run: |
+        ./ngrok authtoken "2caHmdmIRjB4ANpwvKxjOYuH56N_2NnL8f3pYFBrzTvUVVPzy"
         ./ngrok tcp 3389 &
-
-    - name: Wait for ngrok tunnel to be established
-      run: sleep 10  # ينتظر ثواني للسماح بإنشاء النفق
-
-    - name: Connect to XRDP session
-      run: |
-        sudo apt install -y freerdp2-x11
-        xfreerdp /v:$(curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url') --no-nla --ignore-certificate -u user -p ""  # توصيل مباشر بدون كلمة مرور
+        sudo xrdp &
