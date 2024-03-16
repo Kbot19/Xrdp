@@ -38,14 +38,7 @@ jobs:
     - name: Wait for ngrok tunnel to be established
       run: sleep 10  # ينتظر ثواني للسماح بإنشاء النفق
 
-    - name: Get ngrok public URL
-      id: ngrok
-      run: echo "::set-output name=url::$(curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')"
-
-    - name: Display ngrok public URL
-      run: echo "Ngrok public URL: ${{ steps.ngrok.outputs.url }}"
-
     - name: Connect to XRDP session
       run: |
         sudo apt install -y freerdp2-x11
-        xfreerdp /v:${{ steps.ngrok.outputs.url }} --no-nla --ignore-certificate -u user -p ""  # توصيل مباشر بدون كلمة مرور
+        xfreerdp /v:$(curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url') --no-nla --ignore-certificate -u user -p ""  # توصيل مباشر بدون كلمة مرور
